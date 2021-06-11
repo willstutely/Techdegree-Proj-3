@@ -78,15 +78,18 @@ register.addEventListener('change', e => {
 });
 
 // Payment Info
-
+// Select the <select> element with the #payment ID and store it in a variable, along with
+// the <div> elements for the various methods of payment
 const payment = document.getElementById('payment');
 const creditCard = document.getElementById('credit-card');
 const paypal = document.getElementById('paypal');
 const bitcoin = document.getElementById('bitcoin');
 
+// Set the initial display of Paypal and Bitcoin to "none" so that the Credit Card acts as default
 paypal.style.display = 'none';
 bitcoin.style.display = 'none';
 
+// Set the attribute of the Credit Card Option as "selected" by default
 payment.children[1].setAttribute('selected', "");
 
 // Function for deselecting a payment option. Purpose: keep event listener clean
@@ -97,27 +100,68 @@ function deselectOption(arr) {
     return;
 }
 
-payment.addEventListener('change', e => {
- 
-    if (payment.children[3].selected === true) {
-        deselectOption(payment);
-        payment.children[3].setAttribute('selected', "");
-        creditCard.style.display = 'none';
-        paypal.style.display = 'none';
-        bitcoin.style.display = '';
-    } else if (payment.children[2].selected === true) {
-        deselectOption(payment);
-        payment.children[2].setAttribute('selected', "");
-        creditCard.style.display = 'none';
-        paypal.style.display = '';
-        bitcoin.style.display = 'none';
-    } else if (payment.children[1].selected === true) {
-        deselectOption(payment);
-        payment.children[1].setAttribute('selected', "");
-        creditCard.style.display = '';
-        paypal.style.display = 'none';
-        bitcoin.style.display = 'none';
+// Function first calls the deslectOption function to clear the slate, and then loops
+// through the payment options to check which one has been selected.  Depending on which one
+// the other payment options are appropriately hidden.
+function updatePayment(arr) {
+    deselectOption(payment);
+    for (let i=0; i<arr.children.length; i++) {
+        if (arr.children[i].selected === true) {
+            if (arr.children[i].value === 'credit-card') {
+                payment.children[i].setAttribute('selected', "");
+                creditCard.style.display = '';
+                paypal.style.display = 'none';
+                bitcoin.style.display = 'none';
+            } else if (arr.children[i].value === 'paypal') {
+                payment.children[i].setAttribute('selected', "");
+                paypal.style.display = ''
+                creditCard.style.display = 'none';
+                bitcoin.style.display = 'none';
+            } else if (arr.children[i].value === 'bitcoin') {
+                payment.children[i].setAttribute('selected', "");
+                bitcoin.style.display = ''
+                creditCard.style.display = 'none';
+                paypal.style.display = 'none';
+            }
+        }
     }
-});
+}
+
+// Event Listener on "payment" that checks the 'selected' status of each option and
+// calls the updatePayment function on the 'payment' array 
+payment.addEventListener('change', e => {
+    if (payment.children[3].selected === true) {
+        updatePayment(payment);
+    } else if (payment.children[2].selected === true) {
+        updatePayment(payment);
+    } else if (payment.children[1].selected === true) {
+        updatePayment(payment);
+    }
+})
+
+
+
+// payment.addEventListener('change', e => {
+ 
+//     if (payment.children[3].selected === true) {
+//         deselectOption(payment);
+//         payment.children[3].setAttribute('selected', "");
+//         creditCard.style.display = 'none';
+//         paypal.style.display = 'none';
+//         bitcoin.style.display = '';
+//     } else if (payment.children[2].selected === true) {
+//         deselectOption(payment);
+//         payment.children[2].setAttribute('selected', "");
+//         creditCard.style.display = 'none';
+//         paypal.style.display = '';
+//         bitcoin.style.display = 'none';
+//     } else if (payment.children[1].selected === true) {
+//         deselectOption(payment);
+//         payment.children[1].setAttribute('selected', "");
+//         creditCard.style.display = '';
+//         paypal.style.display = 'none';
+//         bitcoin.style.display = 'none';
+//     }
+// });
 
 

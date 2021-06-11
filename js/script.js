@@ -40,7 +40,7 @@ if (color.disabled === true) {
 // selected Design option.  If the two values match then hide the options that do not match
 design.addEventListener('change', e => {
     color.disabled = false;
-    label.textContent = "Color:"
+    label.textContent = "Color:";
     for (let i=0; i<colorOption.length; i+=1) {
         const designChoice = e.target.value;
         const designAttribute = colorOption[i].getAttribute('data-theme');
@@ -76,4 +76,48 @@ register.addEventListener('change', e => {
     }
     costTotal.innerHTML = `Total: $${totalCost}`
 });
+
+// Payment Info
+
+const payment = document.getElementById('payment');
+const creditCard = document.getElementById('credit-card');
+const paypal = document.getElementById('paypal');
+const bitcoin = document.getElementById('bitcoin');
+
+paypal.style.display = 'none';
+bitcoin.style.display = 'none';
+
+payment.children[1].setAttribute('selected', "");
+
+// Function for deselecting a payment option. Purpose: keep event listener clean
+function deselectOption(arr) {
+    for (let i=0; i<arr.children.length; i++){
+        arr.children[i].removeAttribute('selected', '');
+    }
+    return;
+}
+
+payment.addEventListener('change', e => {
+ 
+    if (payment.children[3].selected === true) {
+        deselectOption(payment);
+        payment.children[3].setAttribute('selected', "");
+        creditCard.style.display = 'none';
+        paypal.style.display = 'none';
+        bitcoin.style.display = '';
+    } else if (payment.children[2].selected === true) {
+        deselectOption(payment);
+        payment.children[2].setAttribute('selected', "");
+        creditCard.style.display = 'none';
+        paypal.style.display = '';
+        bitcoin.style.display = 'none';
+    } else if (payment.children[1].selected === true) {
+        deselectOption(payment);
+        payment.children[1].setAttribute('selected', "");
+        creditCard.style.display = '';
+        paypal.style.display = 'none';
+        bitcoin.style.display = 'none';
+    }
+});
+
 

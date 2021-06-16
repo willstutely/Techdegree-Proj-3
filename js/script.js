@@ -63,28 +63,49 @@ design.addEventListener('change', e => {
 // ID "activities-cost", and create a variable to store the cumulative monetary value
 // of each activity
 const register = document.getElementById('activities');
+const activitiesBox = document.getElementById('activities-box');
+const activities = activitiesBox.children;
 const costTotal = document.getElementById('activities-cost');
 let totalCost = 0;
-let selected = [];
 
 // Event Listener on the registration fieldset.  Upon detecting 'change' to a checkbox
 // collect the 'data-cost' attribute, convert that value to a number (using parseInt), 
 // and then verify 'checked' status of that item in order to add/subtract the parsed value 
 // to the variable "totalCost".  Update the innerHTML of 'costTotal' to reflect the total value
 // of selected activities
+
 register.addEventListener('change', e => {
     const dataCost = parseInt(e.target.getAttribute('data-cost'));
-    if (e.target.checked === true) {
+    let schedule = e.target.getAttribute('data-day-and-time');
+    if (e.target.checked) {
+        for (let i=0; i<activities.length; i++) {
+            let others = activities[i].firstElementChild;
+            let othersTime = others.getAttribute('data-day-and-time');
+            if (schedule === othersTime) {
+              others.disabled = true;
+              e.target.disabled = false;
+            }
+        }
         totalCost += dataCost;
-        selected.push(e.target.getAttribute('data-day-and-time'));
+        
     } else {
+        for (let i=0; i<activities.length; i++) {
+            let others = activities[i].firstElementChild;
+            let othersTime = others.getAttribute('data-day-and-time');
+            if (schedule === othersTime) {
+              others.disabled = false;
+            }
+        }
         totalCost -= dataCost;
-        selected.splice(e.target.getAttribute('data-day-and-time'), 1);
     }
     costTotal.innerHTML = `Total: $${totalCost}`
 });
 
-// Payment Info
+
+/* ===================
+    Payment Info
+====================== */
+
 // Select the <select> element with the #payment ID and store it in a variable, along with
 // the <div> elements for the various methods of payment
 const payment = document.getElementById('payment');
@@ -189,6 +210,8 @@ function validateName(input) {
 };
 
 // Email validation function. emailHint variable stored near beginning of section
+// If the email input field is left blank the hint textContent changes to remind
+// the user to enter their email
 function validateEmail(input) {
     let address = input.value;
     let emailTest = /^[^@]+@[^@.]+\.[a-z]+$/i.test(address);
@@ -197,6 +220,9 @@ function validateEmail(input) {
     } else {
         emailHint.style.display = 'block';
         event.preventDefault();
+    }
+    if (address.length === 0) {
+        emailHint.textContent = 'Whoops, you forgot to enter your email!';
     }
     return;
 }

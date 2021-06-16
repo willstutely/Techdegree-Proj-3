@@ -5,7 +5,6 @@
 
 // Select the Name Input and call the '.focus()' method so it will be highlighted on page load or refresh
 const nameInput = document.getElementById('name');
-
 nameInput.focus();
 
 // Select the Job Role and "Other Job Role" elements
@@ -77,6 +76,9 @@ let totalCost = 0;
 register.addEventListener('change', e => {
     const dataCost = parseInt(e.target.getAttribute('data-cost'));
     let schedule = e.target.getAttribute('data-day-and-time');
+// When an activity is chosen iterate through the rest of the activities and disable
+// the activities with the same day and time.  Enable those activities if the user
+// unchecks the box.
     if (e.target.checked) {
         for (let i=0; i<activities.length; i++) {
             let others = activities[i].firstElementChild;
@@ -87,7 +89,6 @@ register.addEventListener('change', e => {
             }
         }
         totalCost += dataCost;
-        
     } else {
         for (let i=0; i<activities.length; i++) {
             let others = activities[i].firstElementChild;
@@ -134,7 +135,7 @@ function deselectOption(arr) {
 function updatePayment(arr) {
     deselectOption(payment);
     for (let i=0; i<arr.children.length; i++) {
-        if (arr.children[i].selected === true) {
+        if (arr.children[i].selected) {
             if (arr.children[i].value === 'credit-card') {
                 arr.children[i].setAttribute('selected', "");
                 creditCard.style.display = '';
@@ -158,19 +159,18 @@ function updatePayment(arr) {
 // Event Listener on "payment" that checks the 'selected' status of each option and
 // calls the updatePayment function on the 'payment' array 
 payment.addEventListener('change', e => {
-    if (payment.children[3].selected === true) {
+    if (payment.children[3].selected) {
         updatePayment(payment);
-    } else if (payment.children[2].selected === true) {
+    } else if (payment.children[2].selected) {
         updatePayment(payment);
-    } else if (payment.children[1].selected === true) {
+    } else if (payment.children[1].selected) {
         updatePayment(payment);
     }
 })
 
-
-/* ===============
-  Form Validation
-================= */
+/* ===================
+    Form Validation
+====================== */
 
 // Form input elements selected and stored in relevant variables
 const emailInput = document.getElementById('email');
@@ -200,7 +200,7 @@ Validation Function Section.
 function validateName(input) {
     let name = input.value;
     let nameTest = /^[a-z ,'-]+$/i.test(name);
-    if (nameTest === true) {
+    if (nameTest) {
         nameHint.style.display = 'none';
     } else {
         nameHint.style.display = 'block';
@@ -215,7 +215,7 @@ function validateName(input) {
 function validateEmail(input) {
     let address = input.value;
     let emailTest = /^[^@]+@[^@.]+\.[a-z]+$/i.test(address);
-    if (emailTest === true) {
+    if (emailTest) {
         emailHint.style.display = 'none';
     } else {
         emailHint.style.display = 'block';
@@ -229,10 +229,10 @@ function validateEmail(input) {
 
 // Credit Card validation function. cardHint variable stored near beginning of section
 function validateCreditCard(input) {
-    if (payment.children[1].selected === true) {
+    if (payment.children[1].selected) {
         let card = creditCardNumber.value
         let cardTest = /^[\d]{13,16}$/.test(card);
-        if (cardTest === true) {
+        if (cardTest) {
             cardHint.style.display = 'none';
         } else {
             cardHint.style.display = 'block';
@@ -244,10 +244,10 @@ function validateCreditCard(input) {
 
 // Zip Code validation function. zipHint variable stored near beginning of section
 function validateZipCode(input) {
-    if (payment.children[1].selected === true) {
+    if (payment.children[1].selected) {
         let zip = input.value;
         let zipTest = /^[\d]{5}$/.test(zip);
-        if (zipTest === true) {
+        if (zipTest) {
             zipHint.style.display = 'none';
         } else {
             zipHint.style.display = 'block';
@@ -259,10 +259,10 @@ function validateZipCode(input) {
 
 // CVV validation function. cvvHint variable stored near beginning of section
 function validateCVV(input) {
-    if (payment.children[1].selected === true) {
+    if (payment.children[1].selected) {
         let cvvCode = input.value;
         let cvvTest = /^[\d]{3}$/.test(cvvCode);
-        if (cvvTest === true) {
+        if (cvvTest) {
             cvvHint.style.display = 'none';
         } else {
             cvvHint.style.display = 'block';
@@ -295,7 +295,6 @@ form.addEventListener('submit', e => {
     validateZipCode(zipCode);
     validateCVV(cvv);
     validateActivity(register);
-
 });
 
 // Keyup listener on the email input that calls the validateEmail function
@@ -310,25 +309,3 @@ emailInput.addEventListener('keyup', e => {
 
 
 
-// payment.addEventListener('change', e => {
- 
-//     if (payment.children[3].selected === true) {
-//         deselectOption(payment);
-//         payment.children[3].setAttribute('selected', "");
-//         creditCard.style.display = 'none';
-//         paypal.style.display = 'none';
-//         bitcoin.style.display = '';
-//     } else if (payment.children[2].selected === true) {
-//         deselectOption(payment);
-//         payment.children[2].setAttribute('selected', "");
-//         creditCard.style.display = 'none';
-//         paypal.style.display = '';
-//         bitcoin.style.display = 'none';
-//     } else if (payment.children[1].selected === true) {
-//         deselectOption(payment);
-//         payment.children[1].setAttribute('selected', "");
-//         creditCard.style.display = '';
-//         paypal.style.display = 'none';
-//         bitcoin.style.display = 'none';
-//     }
-// });

@@ -102,7 +102,6 @@ register.addEventListener('change', e => {
     costTotal.innerHTML = `Total: $${totalCost}`
 });
 
-
 /* ===================
     Payment Info
 ====================== */

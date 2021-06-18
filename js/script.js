@@ -228,6 +228,11 @@ function validateEmail(input) {
         emailTitle.className = "not-valid";
         event.preventDefault();
     } 
+    if (address.length === 0) {
+        emailHint.style.display = 'block'
+        emailTitle.className = 'not-valid';
+        emailHint.textContent = 'Whoops, you forgot your email!'
+    }
     return;
 }
 

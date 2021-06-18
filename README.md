@@ -13,4 +13,4 @@ Payment Section:
 Payment by credit card is shown as the default option until the user selects one of the two remaining options.  In that event the relevant payment info is shown, and all other options are hidden.  
 
 Validation:
-Users will not be able to submit the form if the required areas aren't filled in properly.  Helpful hints appear on the any of the required form fields that need attention as well as reminding the user they must choose at least one activity. Comments in the JavaScript file detail how validation is accomplished
+Users will not be able to submit the form if the required areas aren't filled in properly.  Helpful hints appear on the any of the required form fields: 1. Name, 2. Email, 3. Users must choose at least one activity, 4. Credit Card Number, 5. Credit Card Zip Code, 6. Credit Card CVV code.  If a user leaves the email input field blank the hint messaged is changed so that instead of mentioning an improperly formatted email it lets them know they forgot it entirely. Comments in the JavaScript file detail how validation is accomplished

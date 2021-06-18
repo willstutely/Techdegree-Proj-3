@@ -186,6 +186,8 @@ const zipHint = document.getElementById('zip-hint');
 const cvvHint = document.getElementById('cvv-hint');
 const activityHint = document.getElementById('activities-hint');
 
+
+
 /* =========================
 Validation Function Section.
 ============================ */
@@ -197,12 +199,15 @@ Validation Function Section.
 
 // Name validation function. nameHint variable stored near beginning of section
 function validateName(input) {
+    const nameTitle = nameInput.parentNode;
     let name = input.value;
     let nameTest = /^[a-z ,'-]+$/i.test(name);
     if (nameTest) {
         nameHint.style.display = 'none';
+        nameTitle.className = '';
     } else {
         nameHint.style.display = 'block';
+        nameTitle.className = "not-valid";
         event.preventDefault();
     }
     return;
@@ -212,44 +217,58 @@ function validateName(input) {
 // If the email input field is left blank the hint textContent changes to remind
 // the user to enter their email
 function validateEmail(input) {
+    const emailTitle = emailInput.parentNode; 
     let address = input.value;
     let emailTest = /^[^@]+@[^@.]+\.[a-z]+$/i.test(address);
     if (emailTest) {
         emailHint.style.display = 'none';
+        emailTitle.className = '';
     } else {
         emailHint.style.display = 'block';
+        emailTitle.className = "not-valid";
         event.preventDefault();
-    }
-    if (address.length === 0) {
-        emailHint.textContent = 'Whoops, you forgot to enter your email!';
-    }
+    } 
+    return;
+}
+
+function forgotEmail(input) {
+    const emailTitle = emailInput.parentNode;
+    emailHint.style.display = 'block';
+    emailTitle.className = 'not-valid';
+    emailHint.textContent = 'Whoops, you forgot your email!'
+    
     return;
 }
 
 // Credit Card validation function. cardHint variable stored near beginning of section
 function validateCreditCard(input) {
+    const creditTitle = creditCardNumber.parentNode;
     if (payment.children[1].selected) {
-        let card = creditCardNumber.value
+        let card = input.value
         let cardTest = /^[\d]{13,16}$/.test(card);
         if (cardTest) {
             cardHint.style.display = 'none';
+            creditTitle.className = "";
         } else {
             cardHint.style.display = 'block';
+            creditTitle.className = "not-valid";
             event.preventDefault();
         }
         return;
     }
 }
-
 // Zip Code validation function. zipHint variable stored near beginning of section
 function validateZipCode(input) {
+    const zipTitle = zipCode.parentNode;
     if (payment.children[1].selected) {
         let zip = input.value;
         let zipTest = /^[\d]{5}$/.test(zip);
         if (zipTest) {
             zipHint.style.display = 'none';
+            zipTitle.className = "";
         } else {
             zipHint.style.display = 'block';
+            zipTitle.className = "not-valid";
             event.preventDefault();
         }
         return;
@@ -258,13 +277,16 @@ function validateZipCode(input) {
 
 // CVV validation function. cvvHint variable stored near beginning of section
 function validateCVV(input) {
+    const cvvTitle = cvv.parentNode;
     if (payment.children[1].selected) {
         let cvvCode = input.value;
         let cvvTest = /^[\d]{3}$/.test(cvvCode);
         if (cvvTest) {
             cvvHint.style.display = 'none';
+            cvvTitle.className = "";
         } else {
             cvvHint.style.display = 'block';
+            cvvTitle.className = "not-valid";
             event.preventDefault();
         }
         return;
@@ -277,10 +299,13 @@ function validateCVV(input) {
 // an activity.  Based on the boolean value the hint/error message is displayed
 // or hidden.
 function validateActivity(input) {
+    const legend = register.firstElementChild;
     if (totalCost>0) {
         activityHint.style.display = 'none';
+        legend.className = "";
     } else {
         activityHint.style.display = 'block';
+        legend.className = "not-valid";
         event.preventDefault();
     }
     return;
@@ -288,23 +313,46 @@ function validateActivity(input) {
 
 // Event Listener on the <form> element that calls the corresponding input validators
 form.addEventListener('submit', e => {
+    if (emailInput.length === 0) {
+        forgotEmail(emailInput)
+    } else {
+        validateEmail(emailInput);
+    }
     validateName(nameInput);
-    validateEmail(emailInput);
     validateCreditCard(creditCardNumber);
     validateZipCode(zipCode);
     validateCVV(cvv);
     validateActivity(register);
 });
 
-// Keyup listener on the email input that calls the validateEmail function
-// and displays the email hint until the user enters a correctly formatted email
+// Keyup listeners on all required inputs that calls the relevant functions
+// thereby resolving the error message as the user correctly enters the necessary info
 emailInput.addEventListener('keyup', e => {
-    validateEmail(event.target);
+        validateEmail(e.target);        
 });
 
+nameInput.addEventListener('keyup', e => {
+    validateName(e.target);
+})
 
+register.addEventListener('change', e => {
+    validateActivity(e.target);
+})
 
+creditCardNumber.addEventListener('keyup', e => {
+    if (cardHint.style.display === 'block') {
+        validateCreditCard(e.target);
+    }
+})
 
+zipCode.addEventListener('keyup', e => {
+    if (zipHint.style.display === 'block') {
+        validateZipCode(e.target);
+    }
+})
 
-
-
+cvv.addEventListener('keyup', e => {
+    if (cvvHint.style.display === 'block') {
+        validateCVV(e.target);
+    }
+})

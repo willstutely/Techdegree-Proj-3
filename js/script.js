@@ -236,15 +236,6 @@ function validateEmail(input) {
     return;
 }
 
-function forgotEmail(input) {
-    const emailTitle = emailInput.parentNode;
-    emailHint.style.display = 'block';
-    emailTitle.className = 'not-valid';
-    emailHint.textContent = 'Whoops, you forgot your email!'
-    
-    return;
-}
-
 // Credit Card validation function. cardHint variable stored near beginning of section
 function validateCreditCard(input) {
     const creditTitle = creditCardNumber.parentNode;

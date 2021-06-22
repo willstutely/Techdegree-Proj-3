@@ -89,6 +89,8 @@ register.addEventListener('change', e => {
             }
         }
         totalCost += dataCost;
+        // call validateActivity function to clear Activity Hint when an activity is checked
+        validateActivity(e.target);
     } else {
         for (let i=0; i<activities.length; i++) {
             let others = activities[i].firstElementChild;
@@ -186,8 +188,6 @@ const zipHint = document.getElementById('zip-hint');
 const cvvHint = document.getElementById('cvv-hint');
 const activityHint = document.getElementById('activities-hint');
 
-
-
 /* =========================
 Validation Function Section.
 ============================ */
@@ -216,22 +216,21 @@ function validateName(input) {
 // Email validation function. emailHint variable stored near beginning of section
 // If the email input field is left blank the hint textContent changes to remind
 // the user to enter their email
+const emailTitle = emailInput.parentNode; 
+
 function validateEmail(input) {
-    const emailTitle = emailInput.parentNode; 
-    let address = input.value;
-    let emailTest = /^[^@]+@[^@.]+\.[a-z]+$/i.test(address);
-    if (emailTest) {
-        emailHint.style.display = 'none';
-        emailTitle.className = '';
-    } else {
-        emailHint.style.display = 'block';
-        emailTitle.className = "not-valid";
-        event.preventDefault();
-    } 
-    if (address.length === 0) {
-        emailHint.style.display = 'block'
-        emailTitle.className = 'not-valid';
-        emailHint.textContent = 'Whoops, you forgot your email!'
+    let address;
+    if (input.value.length >= 1) {
+        address = input.value;
+        let emailTest = /^[^@]+@[^@.]+\.[a-z]+$/i.test(address);
+        if (emailTest) {
+            emailHint.style.display = 'none';
+            emailTitle.className = '';
+        } else {
+            emailHint.style.display = 'block';
+            emailTitle.className = "not-valid";
+            event.preventDefault();
+        } 
     }
     return;
 }
@@ -300,6 +299,7 @@ function validateActivity(input) {
         activityHint.style.display = 'none';
         legend.className = "";
     } else {
+        
         activityHint.style.display = 'block';
         legend.className = "not-valid";
         event.preventDefault();
@@ -308,31 +308,45 @@ function validateActivity(input) {
 }
 
 // Event Listener on the <form> element that calls the corresponding input validators
+// Conditional added for email verification to check if field was left blank in which case
+// the hint is changed to 
 form.addEventListener('submit', e => {
-    if (emailInput.length === 0) {
-        forgotEmail(emailInput)
+    validateName(nameInput);
+    if (emailInput.value.length === 0) {
+        emailHint.style.display = 'block'
+        emailTitle.className = 'not-valid';
+        emailHint.textContent = 'Whoops, you forgot your email!'
     } else {
         validateEmail(emailInput);
     }
-    validateName(nameInput);
+    validateActivity(register);
     validateCreditCard(creditCardNumber);
     validateZipCode(zipCode);
     validateCVV(cvv);
-    validateActivity(register);
 });
 
 // Keyup listeners on all required inputs that calls the relevant functions
 // thereby resolving the error message as the user correctly enters the necessary info
-emailInput.addEventListener('keyup', e => {
-        validateEmail(e.target);        
-});
-
-nameInput.addEventListener('keyup', e => {
+nameInput.addEventListener('blur', e => {
     validateName(e.target);
 })
 
-register.addEventListener('change', e => {
-    validateActivity(e.target);
+nameInput.addEventListener('keyup', e => {
+    if (e.target.value.length >= 1) {
+        validateName(e.target);
+    }
+});
+
+emailInput.addEventListener('blur', e => {
+    if (emailInput.value.length < 1) {
+        emailHint.style.display = 'block'
+        emailTitle.className = 'not-valid';
+        emailHint.textContent = 'Whoops, you forgot your email!'  
+    }      
+});
+
+emailInput.addEventListener('keyup', e => {
+    validateEmail(e.target);
 })
 
 creditCardNumber.addEventListener('keyup', e => {
@@ -351,4 +365,64 @@ cvv.addEventListener('keyup', e => {
     if (cvvHint.style.display === 'block') {
         validateCVV(e.target);
     }
+})
+
+// Activities Focus/Blur events
+const activityDiv = document.getElementById('activities-box');
+const activityDivChildren = activityDiv.children;
+
+activityDivChildren[0].firstElementChild.addEventListener('focus', e => {
+    e.target.parentNode.className = 'focus';
+})
+
+activityDivChildren[0].firstElementChild.addEventListener('blur', e => {
+    e.target.parentNode.className = '';
+})
+
+activityDivChildren[1].firstElementChild.addEventListener('focus', e => {
+    e.target.parentNode.className = 'focus';
+})
+
+activityDivChildren[1].firstElementChild.addEventListener('blur', e => {
+    e.target.parentNode.className = '';
+})
+
+activityDivChildren[2].firstElementChild.addEventListener('focus', e => {
+    e.target.parentNode.className = 'focus';
+})
+
+activityDivChildren[2].firstElementChild.addEventListener('blur', e => {
+    e.target.parentNode.className = '';
+})
+
+activityDivChildren[3].firstElementChild.addEventListener('focus', e => {
+    e.target.parentNode.className = 'focus';
+})
+
+activityDivChildren[3].firstElementChild.addEventListener('blur', e => {
+    e.target.parentNode.className = '';
+})
+
+activityDivChildren[4].firstElementChild.addEventListener('focus', e => {
+    e.target.parentNode.className = 'focus';
+})
+
+activityDivChildren[4].firstElementChild.addEventListener('blur', e => {
+    e.target.parentNode.className = '';
+})
+
+activityDivChildren[5].firstElementChild.addEventListener('focus', e => {
+    e.target.parentNode.className = 'focus';
+})
+
+activityDivChildren[5].firstElementChild.addEventListener('blur', e => {
+    e.target.parentNode.className = '';
+})
+
+activityDivChildren[6].firstElementChild.addEventListener('focus', e => {
+    e.target.parentNode.className = 'focus';
+})
+
+activityDivChildren[6].firstElementChild.addEventListener('blur', e => {
+    e.target.parentNode.className = '';
 })

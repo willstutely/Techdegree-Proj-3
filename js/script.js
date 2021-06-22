@@ -89,7 +89,8 @@ register.addEventListener('change', e => {
             }
         }
         totalCost += dataCost;
-        // call validateActivity function to clear Activity Hint when an activity is checked
+        // call validateActivity function to clear Activity Hint when an activity is checked.
+        // validateActivity function details are found below in the Validation Function Section
         validateActivity(e.target);
     } else {
         for (let i=0; i<activities.length; i++) {
@@ -115,7 +116,7 @@ const creditCard = document.getElementById('credit-card');
 const paypal = document.getElementById('paypal');
 const bitcoin = document.getElementById('bitcoin');
 
-// Set the initial display of Paypal and Bitcoin to "none" so that the Credit Card acts as default
+// Set the initial style.display of Paypal and Bitcoin to "none" so that the Credit Card acts as default
 paypal.style.display = 'none';
 bitcoin.style.display = 'none';
 
@@ -188,11 +189,11 @@ const zipHint = document.getElementById('zip-hint');
 const cvvHint = document.getElementById('cvv-hint');
 const activityHint = document.getElementById('activities-hint');
 
-/* =========================
-Validation Function Section.
-============================ */
+/* =============================
+   Validation Function Section.
+================================ */
 
-// Each function (with the exception of the Activity Validator collects the value 
+// Each function (with the exception of the Activity Validator) collects the value 
 // of the relevant input; stores the results of a regex test in another variable 
 // that is then used in a conditional which displays or hides the relevant 
 // hint/error message for that input
@@ -252,6 +253,7 @@ function validateCreditCard(input) {
         return;
     }
 }
+
 // Zip Code validation function. zipHint variable stored near beginning of section
 function validateZipCode(input) {
     const zipTitle = zipCode.parentNode;
@@ -299,7 +301,6 @@ function validateActivity(input) {
         activityHint.style.display = 'none';
         legend.className = "";
     } else {
-        
         activityHint.style.display = 'block';
         legend.className = "not-valid";
         event.preventDefault();
